@@ -1,0 +1,307 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+
+const INITIAL_PRODUCTS = [
+  { id: 1, name: 'Premium Heavy Mixer Grinder', category: 'Mixer Grinders', price: '₹3,499', desc: 'High-torque 750W motor with heavy-duty stainless steel jars.', img: 'https://images.unsplash.com/photo-1578643463396-0997cb5328c1?auto=format&fit=crop&q=80&w=400' },
+  { id: 2, name: '4Square High-Speed Ceiling Fan', category: 'Fans', price: '₹2,199', desc: 'Aerodynamic blades providing maximum air delivery with minimal noise.', img: 'https://images.unsplash.com/photo-1618945533008-091002468301?auto=format&fit=crop&q=80&w=400' },
+  { id: 3, name: 'Instant 3L Water Heater', category: 'Water Heaters', price: '₹4,250', desc: 'Rust-proof outer body with high-grade heating element.', img: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&q=80&w=400' },
+  { id: 4, name: 'Mixer Grinder Armature & Spares', category: 'Spare Parts', price: '₹450', desc: 'Genuine copper wire replacement armatures for heavy duty mixers.', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=400' },
+  { id: 5, name: 'Digital Infrared Cooktop', category: 'Kitchen Appliances', price: '₹2,890', desc: 'Energy efficient touch-control cooking panel with multiple presets.', img: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=400' },
+];
+
+const INITIAL_GALLERY = [
+  'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=500',
+  'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=500',
+  'https://images.unsplash.com/photo-1578643463396-0997cb5328c1?auto=format&fit=crop&q=80&w=500',
+  'https://images.unsplash.com/photo-1618945533008-091002468301?auto=format&fit=crop&q=80&w=500',
+];
+
+const INITIAL_REVIEWS = [
+  { name: "Ramesh Kumar", rating: 5, text: "Best wholesale prices for home appliance spares in Vijayawada! Genuine parts." },
+  { name: "Srinivas Rao", rating: 5, text: "Highly reliable mixer grinder and fan collections. Excellent customer interaction." },
+  { name: "Lakshmi P.", rating: 4, text: "Got a 4Square fan and water heater repaired here. Affordable pricing on spare units." }
+];
+
+export default function Home() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
+  const [newReview, setNewReview] = useState({ name: '', rating: 5, text: '' });
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [visitorCount, setVisitorCount] = useState(1408);
+
+  useEffect(() => {
+    setVisitorCount(prev => prev + 1);
+  }, []);
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    if (!newReview.name || !newReview.text) return alert("Please fill out all fields.");
+    alert("Review submitted successfully! It will appear live once approved by Admin.");
+    setNewReview({ name: '', rating: 5, text: '' });
+  };
+
+  const categories = ['All', 'Mixer Grinders', 'Fans', 'Water Heaters', 'Spare Parts', 'Kitchen Appliances', 'Accessories'];
+
+  const filteredProducts = INITIAL_PRODUCTS.filter(prod => {
+    const matchesSearch = prod.name.toLowerCase().includes(searchTerm.toLowerCase()) || prod.desc.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCat = selectedCategory === 'All' || prod.category === selectedCategory;
+    return matchesSearch && matchesCat;
+  });
+
+  const whatsappLink = (msg) => `https://wa.me/919849131353?text=${encodeURIComponent(msg)}`;
+
+  return (
+    <div className="bg-matteBlack text-white min-h-screen relative font-poppins selection:bg-luxuryGold selection:text-black">
+      
+      {/* --- TOP BRAND LOGOS & STICKY NAVBAR --- */}
+      <header className="sticky top-0 z-50 bg-matteBlack/90 backdrop-blur-md border-b border-luxuryGold/10">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-6">
+            <div className="text-luxuryGold font-bold text-lg tracking-widest border border-luxuryGold/30 px-3 py-1 bg-black/50">SOLAR LOGO</div>
+            <div className="h-10 w-px bg-luxuryGold/20 hidden md:block" />
+            <div className="text-white font-extrabold text-lg tracking-wide bg-bloodRed/30 border border-bloodRed/50 px-3 py-1">4SQUARE LOGO</div>
+          </div>
+          
+          <nav className="flex flex-wrap gap-4 md:gap-6 text-sm font-medium tracking-wide">
+            {['Home', 'About', 'Products', 'Gallery', 'Reviews', 'Location', 'Contact'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-luxuryGold transition-colors text-zinc-300 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-bloodRed after:transition-all">
+                {item}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {/* --- HERO SECTION --- */}
+      <section id="home" className="relative min-h-[85vh] flex items-center justify-center overflow-hidden px-4 py-16">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(212,175,55,0.04)_25%,transparent_25%),linear-gradient(225deg,rgba(139,0,0,0.08)_10%,transparent_90%)] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-bloodRed/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="relative max-w-4xl text-center z-10 space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luxuryGold/30 bg-zinc-900/80 backdrop-blur-sm text-xs text-luxuryGold uppercase tracking-widest font-semibold">
+            ⭐ Google Rating 4.7 &bull; 20+ Reviews
+          </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg">
+            SOLAR <span className="text-transparent bg-clip-text bg-gradient-to-r from-luxuryGold via-yellow-400 to-luxuryGold">MARKETING</span>
+          </h1>
+          <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto font-light">
+            Trusted Home Appliance &amp; Spare Parts Retailer and Wholesaler in Vijayawada. Delivering unparalleled durability.
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 pt-6">
+            <a href={whatsappLink("Hello Solar Marketing, I am interested in your products.")} target="_blank" className="px-8 py-3.5 bg-gradient-to-r from-luxuryGold to-yellow-600 text-black font-semibold rounded-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all transform hover:-translate-y-0.5">
+              WhatsApp Us
+            </a>
+            <a href="tel:9849131353" className="px-8 py-3.5 bg-transparent border border-white/20 text-white font-semibold rounded-lg hover:bg-bloodRed hover:border-bloodRed transition-all transform hover:-translate-y-0.5">
+              Call Now
+            </a>
+            <a href="#location" className="px-8 py-3.5 bg-zinc-900 border border-luxuryGold/40 text-luxuryGold font-semibold rounded-lg hover:bg-zinc-800 transition-all transform hover:-translate-y-0.5">
+              Locate Shop
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* --- SPECIAL OFFERS BANNER --- */}
+      <div className="bg-gradient-to-r from-bloodRed via-red-900 to-bloodRed text-white text-center py-3 text-sm tracking-wider font-semibold animate-pulse">
+        🔥 Special Retail &amp; Wholesale Festival Discounts live! Enquire today via WhatsApp.
+      </div>
+
+      {/* --- ABOUT SECTION --- */}
+      <section id="about" className="max-w-7xl mx-auto px-4 py-24 border-t border-zinc-900">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="w-12 h-1 bg-luxuryGold" />
+            <h2 className="text-3xl md:text-4xl font-bold">About Solar Marketing</h2>
+            <p className="text-zinc-400 leading-relaxed text-justify">
+              Solar Marketing is Vijayawada’s trusted milestone for purchasing high-quality home utilities, parts, and electrical components. Operating as both a retail showroom and an extensive wholesale supplier, we fill the gap for reliable components that keep households functioning properly.
+            </p>
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              {['Mixer Grinders', 'Fans', 'Water Heaters', 'Kitchen Appliances', 'Home Appliance Spares', 'Electrical Accessories'].map((feat) => (
+                <div key={feat} className="flex items-center gap-2 text-sm text-zinc-300">
+                  <span className="text-luxuryGold">✓</span> {feat}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="glass-card p-8 rounded-2xl border border-luxuryGold/20 relative overflow-hidden">
+            <h3 className="text-xl font-bold text-luxuryGold mb-2">Our Commitments</h3>
+            <p className="text-zinc-300 text-sm mb-4">Providing tailored components for local technicians and homeowners alike at standard commercial competitive rates.</p>
+            <div className="p-4 bg-black/40 rounded-xl border-l-4 border-bloodRed">
+              <span className="block font-semibold text-white">Retail &amp; Wholesale Rates</span>
+              <span className="text-xs text-zinc-400">Direct distributor sourcing guarantees absolute savings.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- PRODUCTS SECTION --- */}
+      <section id="products" className="bg-zinc-950/60 py-24 border-t border-zinc-900">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center space-y-4 mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold">Explore Our Catalog</h2>
+            <p className="text-zinc-400 max-w-lg mx-auto text-sm">Find durable appliances and high grade matching replacement components.</p>
+            
+            {/* Search and Filters */}
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-center pt-6 max-w-3xl mx-auto">
+              <input 
+                type="text" 
+                placeholder="Search products or spare parts..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full md:w-2/3 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-luxuryGold text-white"
+              />
+              <select 
+                value={selectedCategory} 
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full md:w-1/3 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-luxuryGold text-white"
+              >
+                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {/* Product Cards Layout */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProducts.map((product) => (
+              <div key={product.id} className="glass-card rounded-xl overflow-hidden flex flex-col group transition-all duration-300">
+                <div className="relative h-48 bg-zinc-900 overflow-hidden">
+                  <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <span className="absolute top-3 right-3 bg-black/70 border border-luxuryGold/30 text-luxuryGold text-xs font-semibold px-2.5 py-1 rounded">
+                    {product.category}
+                  </span>
+                </div>
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                  <div>
+                    <h3 className="font-bold text-lg text-white group-hover:text-luxuryGold transition-colors">{product.name}</h3>
+                    <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{product.desc}</p>
+                  </div>
+                  <div className="flex justify-between items-center pt-2">
+                    <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">{product.price}</span>
+                    <a 
+                      href={whatsappLink(`Hello, I want to enquire about "${product.name}" listed at ${product.price}. Please share availability details.`)}
+                      target="_blank"
+                      className="px-4 py-2 bg-zinc-900 border border-bloodRed/40 text-xs text-white rounded hover:bg-bloodRed hover:text-white transition-all font-medium"
+                    >
+                      Enquire via WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- GALLERY SECTION --- */}
+      <section id="gallery" className="max-w-7xl mx-auto px-4 py-24">
+        <h2 className="text-3xl font-bold text-center mb-2">Visual Showcase</h2>
+        <p className="text-zinc-400 text-center text-sm mb-12">Take a visual tour inside our storefront branch located at Vijayawada.</p>
+        
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          {INITIAL_GALLERY.map((imgUrl, i) => (
+            <div key={i} className="break-inside-avoid overflow-hidden rounded-xl border border-zinc-800 hover:border-luxuryGold/40 cursor-zoom-in transition-all" onClick={() => setSelectedImg(imgUrl)}>
+              <img src={imgUrl} alt="Store Showroom" className="w-full h-auto object-cover hover:scale-102 transition-transform duration-300" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* --- REVIEWS SECTION --- */}
+      <section id="reviews" className="bg-zinc-950/60 py-24 border-t border-zinc-900">
+        <div className="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+          <div>
+            <h2 className="text-3xl font-bold mb-2">Customer Feedback</h2>
+            <p className="text-zinc-400 text-sm mb-8">Verified experiences shared by our long term corporate and local household buyers.</p>
+            <div className="space-y-4">
+              {reviews.map((rev, idx) => (
+                <div key={idx} className="p-5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-sm text-luxuryGold">{rev.name}</span>
+                    <span className="text-xs text-yellow-500">{"★".repeat(rev.rating)}</span>
+                  </div>
+                  <p className="text-xs text-zinc-300 italic">"{rev.text}"</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass-card p-6 rounded-xl border border-luxuryGold/10">
+            <h3 className="text-lg font-semibold mb-4 text-white">Write a Review</h3>
+            <form onSubmit={handleReviewSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-zinc-400 mb-1">Your Name</label>
+                <input type="text" value={newReview.name} onChange={(e) => setNewReview({...newReview, name: e.target.value})} className="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-luxuryGold" placeholder="E.g. Venkatesh Rao" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-zinc-400 mb-1">Rating</label>
+                <select value={newReview.rating} onChange={(e) => setNewReview({...newReview, rating: Number(e.target.value)})} className="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-luxuryGold">
+                  <option value="5">5 Stars (Excellent)</option>
+                  <option value="4">4 Stars (Good)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-zinc-400 mb-1">Review Details</label>
+                <textarea rows="3" value={newReview.text} onChange={(e) => setNewReview({...newReview, text: e.target.value})} className="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-luxuryGold" placeholder="Share your experience..." />
+              </div>
+              <button type="submit" className="w-full py-2.5 bg-bloodRed text-white text-xs font-bold uppercase rounded tracking-wider hover:bg-red-700 transition-all">Submit Review</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* --- GOOGLE MAPS EMBED & LOCATION --- */}
+      <section id="location" className="max-w-7xl mx-auto px-4 py-24">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold">Visit Our Showroom</h2>
+            <div className="text-sm text-zinc-400 space-y-2">
+              <p className="text-white font-medium">Solar Marketing</p>
+              <p>Door No. 11-31-86, Park Road</p>
+              <p>Near Shankar Cafe Building, 1 Town, Tarapet</p>
+              <p>Vijayawada, Andhra Pradesh - 520001</p>
+            </div>
+          </div>
+          <div className="w-full h-72 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 relative">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.213264426569!2d80.6151478!3d16.515286!2m3!1f0!2f0!3f0!3m2!1i1020!2m2!1y100!4f13.1!3m3!1m2!1s0x3a35eff4fdf9bc3b%3A0x28af8d1a123fcd!2sTarapet%2C%20Vijayawada%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000" className="w-full h-full border-0 grayscale invert opacity-80 contrast-125" allowFullScreen="" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      {/* --- CONTACT SECTION --- */}
+      <section id="contact" className="bg-zinc-950 py-16 border-t border-zinc-900">
+        <div className="max-w-4xl mx-auto px-4 text-center space-y-8">
+          <h2 className="text-2xl md:text-3xl font-bold">Need Immediate Assistance?</h2>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[{ label: 'Primary Contact', num: '9849131353' }, { label: 'Wholesale Orders', num: '9490337211' }, { label: 'Spares Support', num: '9441120146' }].map((ph, idx) => (
+              <div key={idx} className="p-4 bg-zinc-900 border border-zinc-800 rounded-lg">
+                <span className="text-xs text-zinc-500 block uppercase font-bold mb-1">{ph.label}</span>
+                <a href={`tel:${ph.num}`} className="text-luxuryGold hover:text-white font-medium text-base tracking-wide transition-colors">+91 {ph.num}</a>
+              </div>
+            ))}
+          </div>
+          <div className="pt-4 text-xs text-zinc-600 font-mono tracking-widest">WEBSITE VISITORS: <span className="text-zinc-400 font-bold">{visitorCount}</span></div>
+        </div>
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="border-t border-zinc-900 bg-matteBlack text-zinc-500 text-xs py-12 text-center">
+        <p>&copy; 2026 Solar Marketing. All rights reserved.</p>
+      </footer>
+
+      {/* Floating Action Buttons */}
+      <a href={whatsappLink("Hello Solar Marketing,\nI am interested in your products.")} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-3.5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center">
+        <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.93 0c3.165.001 6.14 1.233 8.376 3.469 2.235 2.236 3.465 5.211 3.465 8.371 0 6.534-5.338 11.883-11.87 11.883-2.001-.001-3.971-.51-5.713-1.478L0 24zm6.59-4.846c1.6.95 3.16 1.449 4.743 1.451 5.405 0 9.801-4.379 9.804-9.761 0-2.607-1.015-5.059-2.859-6.904C16.435 2.093 13.985 1.076 11.4 1.076c-5.409 0-9.808 4.381-9.811 9.764-.001 1.704.453 3.366 1.317 4.834L1.93 21.17l5.717-1.5z"/></svg>
+      </a>
+
+      {selectedImg && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 cursor-zoom-out" onClick={() => setSelectedImg(null)}>
+          <img src={selectedImg} alt="Enlarged View" className="max-w-full max-h-[85vh] object-contain rounded-lg border border-luxuryGold/20" />
+        </div>
+      )}
+
+    </div>
+  );
+}
